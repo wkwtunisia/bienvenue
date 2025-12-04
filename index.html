@@ -11,11 +11,8 @@
 
   <style>
     :root {
-      --red: #e63946;
-      --dark: #0a0a0a;
-      --glass: rgba(255,255,255,0.08);
-      --text: #f1faee;
-      --border: rgba(255,255,255,0.15);
+      --red: #e63946; --dark: #0a0a0a; --glass: rgba(255,255,255,0.08);
+      --text: #f1faee; --border: rgba(255,255,255,0.15);
     }
     * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',sans-serif; }
     body { background:linear-gradient(135deg,#0f1624,#1d3557); color:var(--text); min-height:100vh; overflow-x:hidden; }
@@ -29,24 +26,32 @@
     }
     .logo img { height:65px; transition:.4s; }
     .logo img:hover { transform:scale(1.1) rotate(3deg); }
-    .header-title h1 {
-      font-size:2.5rem; font-weight:900;
-      background:linear-gradient(90deg,#fff,var(--red));
-      -webkit-background-clip:text; color:transparent;
-    }
+    .header-title h1 { font-size:2.5rem; font-weight:900; background:linear-gradient(90deg,#fff,var(--red)); -webkit-background-clip:text; color:transparent; }
 
-    /* MENU BUTTON PRO */
+    /* LANGUAGE SWITCHER */
+    .lang-switcher {
+      position:fixed; right:20px; top:100px; z-index:1002;
+      background:rgba(255,255,255,0.1); backdrop-filter:blur(15px);
+      border-radius:50px; padding:8px; display:flex; gap:8px;
+      border:1px solid var(--border);
+    }
+    .lang-btn {
+      width:44px; height:44px; border-radius:50%; background:transparent;
+      border:none; color:white; font-weight:bold; cursor:pointer; transition:0.4s; font-size:0.9rem;
+    }
+    .lang-btn.active, .lang-btn:hover { background:var(--red); transform:scale(1.15); box-shadow:0 0 20px rgba(230,57,70,0.7); }
+
+    /* MENU BUTTON */
     .menu-btn {
       position:fixed; left:18px; top:100px; z-index:1002;
       width:68px; height:68px; border-radius:50%;
       background:linear-gradient(135deg,var(--red),#b71c1c);
       border:none; color:white; font-size:2.2rem;
       box-shadow:0 0 50px rgba(230,57,70,0.8), inset 0 0 20px rgba(255,255,255,0.2);
-      cursor:pointer; transition:all 0.4s;
-      animation:float 5s ease-in-out infinite;
+      cursor:pointer; animation:float 5s ease-in-out infinite;
     }
     .menu-btn:hover { transform:scale(1.18); box-shadow:0 0 70px rgba(230,57,70,1); }
-    @keyframes float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-12px); } }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
 
     /* SIDEBAR */
     .sidebar {
@@ -59,13 +64,9 @@
     .sidebar h2 { position:absolute; top:30px; left:30px; color:var(--red); font-size:2rem; font-weight:900; }
     .nav-item {
       padding:22px 35px; color:white; font-size:1.35rem; cursor:pointer;
-      border-left:5px solid transparent; transition:all 0.4s;
-      display:flex; align-items:center;
+      border-left:5px solid transparent; transition:all 0.4s; display:flex; align-items:center;
     }
-    .nav-item:hover, .nav-item.active {
-      background:rgba(230,57,70,0.25); border-left:5px solid var(--red);
-      padding-left:55px; transform:translateX(10px);
-    }
+    .nav-item:hover, .nav-item.active { background:rgba(230,57,70,0.25); border-left:5px solid var(--red); padding-left:55px; transform:translateX(10px); }
     .nav-item i { margin-right:18px; font-size:1.7rem; width:35px; text-align:center; }
 
     .overlay { position:fixed; inset:0; background:rgba(0,0,0,0.92); opacity:0; visibility:hidden; transition:0.4s; z-index:1000; }
@@ -73,20 +74,11 @@
 
     /* MAIN CONTENT */
     .main-content { margin-top:100px; padding:30px 15px; }
-    .hero { text-align:center; padding:30px 15px; }
-    .hero h2 { font-size:2.8rem; margin-bottom:20px; background:linear-gradient(90deg,#a8dadc,#f1faee); -webkit-background-clip:text; color:transparent; }
-    .welcome-msg {
-      max-width:1000px; margin:30px auto; background:var(--glass);
-      padding:35px; border-radius:20px; backdrop-filter:blur(15px);
-      border:1px solid var(--border); font-size:1.2rem; line-height:1.9;
-    }
+    .hero h2 { font-size:2.8rem; text-align:center; margin-bottom:20px; background:linear-gradient(90deg,#a8dadc,#f1faee); -webkit-background-clip:text; color:transparent; }
+    .welcome-msg { max-width:1000px; margin:30px auto; background:var(--glass); padding:35px; border-radius:20px; backdrop-filter:blur(15px); border:1px solid var(--border); font-size:1.2rem; line-height:1.9; }
 
     .cards-container { display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); gap:30px; max-width:1400px; margin:0 auto; }
-    .card-pro {
-      display:none; background:var(--glass); backdrop-filter:blur(20px);
-      border-radius:24px; overflow:hidden; border:1px solid var(--border);
-      transition:all 0.6s; opacity:0; transform:translateY(40px);
-    }
+    .card-pro { display:none; background:var(--glass); backdrop-filter:blur(20px); border-radius:24px; overflow:hidden; border:1px solid var(--border); transition:all 0.6s; opacity:0; transform:translateY(40px); }
     .card-pro.visible { display:block; opacity:1; transform:translateY(0); }
     .card-pro:hover { transform:translateY(-20px) scale(1.03); box-shadow:0 30px 70px rgba(230,57,70,0.5); }
     .card-header { background:linear-gradient(135deg,var(--red),#a4161a); padding:35px; text-align:center; color:white; }
@@ -94,62 +86,63 @@
     .card-header h3 { font-size:1.9rem; }
     .card-body { padding:35px; font-size:1.15rem; line-height:1.9; }
 
-    /* ADMIN PANEL – MAINTENANT AUSSI BEAU QUE LE SITE */
+    /* ADMIN PANEL - DESIGN 2025 */
     .admin-panel {
-      position:fixed; inset:0; background:rgba(0,0,0,0.97); z-index:2000;
-      display:none; overflow-y:auto; padding:20px;
-      align-items:flex-start; justify-content:center;
+      position:fixed; inset:0; background:rgba(0,0,0,0.98); backdrop-filter:blur(15px);
+      z-index:3000; display:none; overflow-y:auto; padding:20px; align-items:flex-start; justify-content:center;
     }
-    .admin-box {
-      max-width:900px; width:100%; margin:100px auto 50px;
-      background:var(--glass); backdrop-filter:blur(25px);
-      border-radius:28px; border:2px solid var(--red);
-      padding:40px; box-shadow:0 20px 80px rgba(230,57,70,0.4);
+    .admin-container {
+      max-width:1200px; width:100%; margin:40px auto;
+      background:rgba(15,15,35,0.95); border-radius:28px; border:2px solid var(--red);
+      box-shadow:0 0 80px rgba(230,57,70,0.4); overflow:hidden;
     }
-    .admin-box h2 {
-      text-align:center; font-size:2.8rem; color:var(--red); margin-bottom:30px;
-      background:linear-gradient(90deg,#fff,var(--red)); -webkit-background-clip:text; color:transparent;
+    .admin-header {
+      background:linear-gradient(135deg,var(--red),#a4161a); color:white; padding:25px 40px;
+      text-align:center; position:relative; font-size:2rem; font-weight:900;
     }
-    .form-group { margin-bottom:25px; }
-    .form-group label { display:block; font-size:1.2rem; margin-bottom:10px; color:#ccc; }
+    .close-admin {
+      position:absolute; right:25px; top:50%; transform:translateY(-50%);
+      background:rgba(255,255,255,0.2); border:none; color:white; width:50px; height:50px;
+      border-radius:50%; font-size:1.5rem; cursor:pointer;
+    }
+    .close-admin:hover { background:rgba(255,255,255,0.4); transform:translateY(-50%) scale(1.1); }
+
+    .admin-card {
+      background:rgba(255,255,255,0.08); backdrop-filter:blur(15px);
+      margin:30px; padding:30px; border-radius:20px; border:1px solid rgba(230,57,70,0.3);
+      transition:all 0.4s;
+    }
+    .admin-card:hover { transform:translateY(-5px); box-shadow:0 20px 40px rgba(230,57,70,0.2); }
+    .admin-card h3 { color:var(--red); font-size:1.6rem; margin-bottom:20px; text-align:center; }
+    .admin-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); gap:25px; padding:0 30px; }
+    .login-box { text-align:center; max-width:400px; margin:0 auto; }
+    .admin-icon { font-size:5rem; color:var(--red); margin-bottom:20px; text-shadow:0 0 30px rgba(230,57,70,0.6); }
+
     textarea, input[type="email"], input[type="password"] {
-      width:100%; padding:16px; border-radius:14px;
-      background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2);
+      width:100%; padding:16px; margin:12px 0; border-radius:14px;
+      background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2);
       color:white; font-size:1.1rem; transition:0.3s;
     }
-    textarea:focus, input:focus { outline:none; border-color:var(--red); box-shadow:0 0 20px rgba(230,57,70,0.3); }
-    .btn-group { text-align:center; margin-top:30px; }
-    button {
-      background:linear-gradient(135deg,var(--red),#b71c1c);
-      color:white; border:none; padding:14px 36px; border-radius:14px;
-      font-size:1.2rem; cursor:pointer; margin:10px; transition:0.4s;
-      box-shadow:0 8px 25px rgba(230,57,70,0.4);
-    }
-    button:hover { transform:translateY(-4px); box-shadow:0 15px 35px rgba(230,57,70,0.6); }
-    .btn-logout { background:#666 !important; }
+    textarea:focus, input:focus { outline:none; border-color:var(--red); box-shadow:0 0 25px rgba(230,57,70,0.4); background:rgba(255,255,255,0.15); }
 
-    /* FOOTER */
+    .btn-login, .btn-save {
+      background:linear-gradient(135deg,var(--red),#b71c1c); color:white; border:none;
+      padding:16px 40px; border-radius:50px; font-size:1.3rem; cursor:pointer; width:100%;
+      box-shadow:0 10px 30px rgba(230,57,70,0.5); transition:all 0.4s;
+    }
+    .btn-login:hover, .btn-save:hover { transform:translateY(-5px); box-shadow:0 20px 50px rgba(230,57,70,0.7); }
+    .btn-logout { background:#444; padding:14px 30px; font-size:1.1rem; margin-left:15px; }
+    .admin-actions { text-align:center; padding:40px 30px 50px; background:rgba(0,0,0,0.3); }
+
     footer { text-align:center; padding:40px 20px; background:rgba(0,0,0,0.7); font-size:0.95rem; opacity:0.85; }
 
-    /* MOBILE PERFECTION */
-    @media (max-width: 768px) {
+    @media (max-width:768px) {
       .header-title h1 { font-size:1.9rem; }
-      .hero h2 { font-size:2.3rem; }
-      .menu-btn { left:12px; top:90px; width:60px; height:60px; font-size:1.9rem; }
-      .sidebar { width:290px; left:-290px; padding-top:130px; }
-      .nav-item { padding:18px 25px; font-size:1.2rem; }
-      .nav-item:hover, .nav-item.active { padding-left:40px; }
-      .cards-container { grid-template-columns:1fr; padding:0 15px; gap:25px; }
-      .card-header { padding:25px; }
-      .card-header i { font-size:3.8rem; }
-      .card-body { padding:25px; font-size:1.1rem; }
-      .admin-box { margin:80px auto 30px; padding:25px; }
-      .admin-box h2 { font-size:2.2rem; }
-    }
-    @media (max-width: 480px) {
-      .header-title h1 { font-size:1.6rem; }
-      .hero h2 { font-size:2rem; }
-      .welcome-msg { padding:20px; font-size:1.1rem; }
+      .lang-switcher, .menu-btn { top:90px; }
+      .sidebar { width:290px; left:-290px; }
+      .cards-container { grid-template-columns:1fr; }
+      .admin-grid { grid-template-columns:1fr; padding:0 15px; }
+      .admin-header { font-size:1.6rem; padding:20px; }
     }
   </style>
 </head>
@@ -157,48 +150,49 @@
 
   <!-- HEADER -->
   <header>
-    <div class="logo">
-      <img src="https://3dologie.com/wp-content/uploads/2024/07/WKW-Automotive-Logo.png" alt="WKW">
-    </div>
-    <div class="header-title">
-      <h1>WKW Automotive Tunisia</h1>
-    </div>
+    <div class="logo"><img src="https://3dologie.com/wp-content/uploads/2024/07/WKW-Automotive-Logo.png" alt="WKW"></div>
+    <div class="header-title"><h1>WKW Automotive Tunisia</h1></div>
     <div style="width:70px;"></div>
   </header>
 
-  <!-- MENU + SIDEBAR -->
-  <button class="menu-btn" onclick="toggleSidebar()">
-    <i class="fas fa-bars"></i>
-  </button>
+  <!-- LANGUES + MENU -->
+  <div class="lang-switcher">
+    <button class="lang-btn active" data-lang="fr">FR</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+    <button class="lang-btn" data-lang="de">DE</button>
+  </div>
+
+  <button class="menu-btn" onclick="toggleSidebar()">Menu</button>
   <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
+  <!-- SIDEBAR -->
   <nav class="sidebar" id="sidebar">
-    <h2>Menu</h2>
-    <div class="nav-item active" onclick="showSection('home')"><i class="fas fa-home"></i> Accueil</div>
-    <div class="nav-item" onclick="showSection('planning')"><i class="fas fa-calendar-check"></i> Planning</div>
-    <div class="nav-item" onclick="showSection('restauration')"><i class="fas fa-utensils"></i> Restauration</div>
-    <div class="nav-item" onclick="showSection('securite')"><i class="fas fa-shield-alt"></i> Sécurité</div>
-    <div class="nav-item" onclick="showAdminPanel()"><i class="fas fa-user-shield"></i> Administration</div>
+    <h2 data-tr="menu">Menu</h2>
+    <div class="nav-item active" onclick="showSection('home')"><i class="fas fa-home"></i><span data-tr="home">Accueil</span></div>
+    <div class="nav-item" onclick="showSection('planning')"><i class="fas fa-calendar-check"></i><span data-tr="planning">Planning</span></div>
+    <div class="nav-item" onclick="showSection('restauration')"><i class="fas fa-utensils"></i><span data-tr="restauration">Restauration</span></div>
+    <div class="nav-item" onclick="showSection('securite')"><i class="fas fa-shield-alt"></i><span data-tr="securite">Sécurité</span></div>
+    <div class="nav-item" onclick="showAdminPanel()"><i class="fas fa-user-shield"></i><span data-tr="admin">Administration</span></div>
   </nav>
 
-  <!-- MAIN CONTENT -->
+  <!-- CONTENU PRINCIPAL -->
   <div class="main-content">
     <div class="hero" id="heroSection">
-      <h2 id="pageTitle">BIENVENUE</h2>
+      <h2 id="pageTitle" data-tr="welcome">BIENVENUE</h2>
       <div class="welcome-msg" id="editableTitle">Chargement du contenu...</div>
     </div>
 
-    <div class="cards-container" id="cardsContainer">
+    <div class="cards-container">
       <div class="card-pro visible" id="cardPlanning">
-        <div class="card-header"><i class="fas fa-calendar-check"></i><h3>Planning des visites</h3></div>
+        <div class="card-header"><i class="fas fa-calendar-check"></i><h3 data-tr="planning_title">Planning des visites</h3></div>
         <div class="card-body" id="c1p">...</div>
       </div>
       <div class="card-pro visible" id="cardRestauration">
-        <div class="card-header"><i class="fas fa-utensils"></i><h3>Restauration</h3></div>
+        <div class="card-header"><i class="fas fa-utensils"></i><h3 data-tr="restauration_title">Restauration</h3></div>
         <div class="card-body" id="c2p">...</div>
       </div>
       <div class="card-pro visible" id="cardSecurite">
-        <div class="card-header"><i class="fas fa-shield-alt"></i><h3>Sécurité & HSE</h3></div>
+        <div class="card-header"><i class="fas fa-shield-alt"></i><h3 data-tr="securite_title">Sécurité & HSE</h3></div>
         <div class="card-body" id="c3p">...</div>
       </div>
     </div>
@@ -206,35 +200,47 @@
 
   <footer>© 2025 WKW Automotive Tunisia - Portail Interne Professionnel</footer>
 
-  <!-- ADMIN PANEL – DESIGN PRO -->
+  <!-- ADMIN PANEL ULTIME -->
   <div class="admin-panel" id="adminPanel">
-    <div class="admin-box">
-      <h2>Administration</h2>
-      <div id="loginForm">
-        <div class="form-group"><input type="email" id="email" placeholder="Email admin" value="admin@wkw.tn"></div>
-        <div class="form-group"><input type="password" id="pass" placeholder="Mot de passe"></div>
-        <div class="btn-group"><button onclick="login()">Connexion</button></div>
+    <div class="admin-container">
+      <div class="admin-header">
+        <h2>Administration du Portail</h2>
+        <button class="close-admin" onclick="document.getElementById('adminPanel').style.display='none'">X</button>
+      </div>
+
+      <div id="loginForm" class="admin-card">
+        <div class="login-box">
+          <i class="fas fa-user-shield admin-icon"></i>
+          <h3>Connexion Administrateur</h3>
+          <input type="email" id="email" placeholder="Email" value="admin@wkw.tn">
+          <input type="password" id="pass" placeholder="Mot de passe">
+          <button class="btn-login" onclick="login()">Se connecter</button>
+        </div>
       </div>
 
       <div id="editForm" style="display:none;">
-        <div class="form-group">
-          <label>Message d'accueil (Hero)</label>
-          <textarea id="mainTitle" rows="6"></textarea>
+        <div class="admin-card">
+          <h3>Message d'accueil principal</h3>
+          <textarea id="mainTitle" rows="7"></textarea>
         </div>
-        <div class="form-group">
-          <label>Planning des visites</label>
-          <textarea id="card1Text" rows="5"></textarea>
+
+        <div class="admin-grid">
+          <div class="admin-card">
+            <h3>Planning des visites</h3>
+            <textarea id="card1Text" rows="6"></textarea>
+          </div>
+          <div class="admin-card">
+            <h3>Restauration</h3>
+            <textarea id="card2Text" rows="6"></textarea>
+          </div>
+          <div class="admin-card">
+            <h3>Sécurité & HSE</h3>
+            <textarea id="card3Text" rows="6"></textarea>
+          </div>
         </div>
-        <div class="form-group">
-          <label>Restauration</label>
-          <textarea id="card2Text" rows="5"></textarea>
-        </div>
-        <div class="form-group">
-          <label>Sécurité & HSE</label>
-          <textarea id="card3Text" rows="5"></textarea>
-        </div>
-        <div class="btn-group">
-          <button onclick="saveContent()">Sauvegarder</button>
+
+        <div class="admin-actions">
+          <button class="btn-save" onclick="saveContent()">Sauvegarder toutes les modifications</button>
           <button class="btn-logout" onclick="logout()">Déconnexion</button>
         </div>
       </div>
@@ -242,30 +248,42 @@
   </div>
 
 <script>
-  // SUPABASE
+  // SUPABASE - REMPLACE PAR TES CLÉS
   const SUPABASE_URL = 'https://ylwuugfjpybaoerruypq.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlsd3V1Z2ZqcHliYW9lcnJ1eXBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzI3MzYsImV4cCI6MjA4MDM0ODczNn0.NC-lSISG8GFTZeiHVTtlISRpXEh09OiaLjwEgWxHe4o';
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('open');
-    document.getElementById('overlay').classList.toggle('active');
-  }
+  // TRADUCTIONS
+  const translations = {
+    fr: { title:"WKW Automotive Tunisia", menu:"Menu", home:"Accueil", planning:"Planning", restauration:"Restauration", securite:"Sécurité", admin:"Administration", welcome:"BIENVENUE", planning_title:"Planning des visites", restauration_title:"Restauration", securite_title:"Sécurité & HSE" },
+    en: { title:"WKW Automotive Tunisia", menu:"Menu", home:"Home", planning:"Visit Planning", restauration:"Canteen", securite:"Safety", admin:"Administration", welcome:"WELCOME", planning_title:"Visit Planning", restauration_title:"Canteen", securite_title:"Safety & HSE" },
+    de: { title:"WKW Automotive Tunisia", menu:"Menü", home:"Startseite", planning:"Besuchsplanung", restauration:"Kantine", securite:"Sicherheit", admin:"Verwaltung", welcome:"WILLKOMMEN", planning_title:"Besuchsplanung", restauration_title:"Kantine", securite_title:"Sicherheit & HSE" }
+  };
 
-  function setActiveMenu(el) {
-    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-    el.classList.add('active');
+  function changeLanguage(lang) {
+    document.querySelectorAll('[data-tr]').forEach(el => {
+      const key = el.getAttribute('data-tr');
+      if (translations[lang][key]) el.textContent = translations[lang][key];
+    });
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector(`.lang-btn[data-lang="${lang}"]`).classList.add('active');
+    localStorage.setItem('lang', lang);
+    document.documentElement.lang = lang;
   }
+  const savedLang = localStorage.getItem('lang') || 'fr';
+  changeLanguage(savedLang);
+  document.querySelectorAll('.lang-btn').forEach(btn => btn.addEventListener('click', () => changeLanguage(btn.dataset.lang)));
+
+  function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('overlay').classList.toggle('active'); }
+  function setActiveMenu(el) { document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
 
   function showSection(section) {
     const hero = document.getElementById('heroSection');
-    const cards = document.querySelectorAll('.card-pro');
-    cards.forEach(c => c.classList.remove('visible'));
-
+    document.querySelectorAll('.card-pro').forEach(c => c.classList.remove('visible'));
     if (section === 'home') {
       hero.style.display = 'block';
-      document.getElementById('pageTitle').textContent = 'BIENVENUE';
-      cards.forEach(c => c.classList.add('visible'));
+      document.getElementById('pageTitle').textContent = translations[savedLang].welcome;
+      document.querySelectorAll('.card-pro').forEach(c => c.classList.add('visible'));
     } else {
       hero.style.display = 'none';
       const cardId = 'card' + section.charAt(0).toUpperCase() + section.slice(1);
@@ -276,18 +294,15 @@
     setActiveMenu(event.target.closest('.nav-item'));
   }
 
-  function showAdminPanel() {
-    document.getElementById('adminPanel').style.display = 'flex';
-    toggleSidebar();
-  }
+  function showAdminPanel() { document.getElementById('adminPanel').style.display = 'flex'; toggleSidebar(); }
 
   async function loadContent() {
     const { data } = await supabase.from('portal_content').select('*').eq('id',1).single();
     if (data) {
       document.getElementById('editableTitle').innerHTML = data.main_title || 'Bienvenue...';
-      document.getElementById('c1p').innerHTML = data.card1_text;
-      document.getElementById('c2p').innerHTML = data.card2_text;
-      document.getElementById('c3p').innerHTML = data.card3_text;
+      document.getElementById('c1p').innerHTML = data.card1_text || '...';
+      document.getElementById('c2p').innerHTML = data.card2_text || '...';
+      document.getElementById('c3p').innerHTML = data.card3_text || '...';
     }
   }
 
@@ -316,14 +331,10 @@
     alert("Sauvegardé !"); loadContent();
   }
 
-  function logout() {
-    supabase.auth.signOut();
-    document.getElementById('adminPanel').style.display = 'none';
-  }
+  function logout() { supabase.auth.signOut(); document.getElementById('adminPanel').style.display = 'none'; }
 
   AOS.init({ duration: 1000, once: true });
   loadContent();
 </script>
-
 </body>
 </html>
