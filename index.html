@@ -3,137 +3,327 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WKW Automotive Tunisia - Portail Interne</title>
+  <title>WKW Automotive Tunisia | Portail Interne</title>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
-    :root { --red:#e63946; --glass:rgba(255,255,255,0.1); }
-    *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
-    body{background:linear-gradient(135deg,#1d3557,#457b9d);color:white;min-height:100vh;overflow-x:hidden;}
-    header{position:fixed;top:0;left:0;right:0;z-index:1000;background:var(--glass);backdrop-filter:blur(15px);border-bottom:1px solid rgba(255,255,255,0.1);padding:15px 20px;display:flex;align-items:center;justify-content:space-between;}
-    .logo img{height:65px;filter:drop-shadow(0 0 10px rgba(230,57,70,0.6));transition:.4s;}
-    .logo img:hover{transform:scale(1.1);}
-    .titles{text-align:center;flex:1;}
-    .fixed-title{font-size:2.4rem;font-weight:900;background:linear-gradient(90deg,#fff,var(--red));-webkit-background-clip:text;color:transparent;}
-    .editable-title{margin-top:10px;font-size:1.1rem;background:var(--glass);padding:12px 20px;border-radius:12px;backdrop-filter:blur(10px);max-width:90%;margin:auto;line-height:1.7;}
-    .menu-btn{position:fixed;left:20px;top:100px;z-index:1002;width:60px;height:60px;border-radius:50%;background:var(--red);border:none;color:white;font-size:1.8rem;box-shadow:0 0 30px rgba(230,57,70,0.7);cursor:pointer;animation:pulse 2s infinite;}
-    .menu-btn:hover{transform:scale(1.15);}
-    @keyframes pulse{0%,100%{box-shadow:0 0 30px rgba(230,57,70,0.7);}50%{box-shadow:0 0 50px rgba(230,57,70,1);}}
-    .sidebar{position:fixed;left:-300px;top:0;bottom:0;width:300px;background:rgba(10,10,10,0.95);backdrop-filter:blur(20px);transition:all .5s cubic-bezier(.68,-.55,.27,1.55);z-index:1001;padding-top:120px;box-shadow:5px 0 30px rgba(0,0,0,0.6);}
-    .sidebar.open{left:0;}
-    .sidebar::before{content:'';position:absolute;top:0;left:0;right:0;height:120px;background:linear-gradient(135deg,var(--red),#a4161a);clip-path:polygon(0 0,100% 0,100% 70%,0 100%);}
-    .sidebar button{display:flex;align-items:center;width:100%;padding:18px 30px;color:white;background:none;border:none;font-size:1.3rem;transition:.3s;cursor:pointer;}
-    .sidebar button:hover{background:rgba(230,57,70,0.3);padding-left:45px;transform:translateX(10px);}
-    .sidebar i{margin-right:18px;font-size:1.5rem;width:30px;}
-    .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);opacity:0;visibility:hidden;transition:.4s;z-index:1000;}
-    .overlay.active{opacity:1;visibility:visible;}
-    .main{margin-top:100px;padding:30px 20px;}
-    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;margin-top:30px;}
-    .card{background:var(--glass);backdrop-filter:blur(15px);border-radius:20px;padding:35px 25px;text-align:center;border:1px solid rgba(255,255,255,0.2);transition:.5s;position:relative;overflow:hidden;}
-    .card::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent);transition:.7s;}
-    .card:hover::before{left:100%;}
-    .card:hover{transform:translateY(-20px) scale(1.03);box-shadow:0 20px 40px rgba(230,57,70,0.4);}
-    .card i{font-size:4rem;color:var(--red);margin-bottom:20px;text-shadow:0 0 20px rgba(230,57,70,0.6);}
-    .admin-panel{max-width:1100px;margin:120px auto;background:var(--glass);backdrop-filter:blur(20px);padding:40px;border-radius:20px;border:1px solid rgba(255,255,255,0.2);display:none;}
-    textarea,input{width:100%;padding:15px;margin:12px 0;border:none;border-radius:12px;background:rgba(255,255,255,0.2);color:white;}
-    button{background:var(--red);padding:14px 32px;border-radius:12px;border:none;color:white;cursor:pointer;}
-    @media(max-width:768px){.fixed-title{font-size:1.8rem;}.menu-btn{left:15px;top:90px;}.sidebar{width:280px;left:-280px;}}
+    :root {
+      --red: #e63946;
+      --dark: #0a0a0a;
+      --glass: rgba(255,255,255,0.08);
+      --text: #f1faee;
+      --border: rgba(255,255,255,0.15);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',sans-serif; }
+    body { background:linear-gradient(135deg,#0f1624,#1d3557); color:var(--text); min-height:100vh; overflow-x:hidden; }
+
+    /* HEADER */
+    header {
+      position:fixed; top:0; left:0; right:0; z-index:1000;
+      background:rgba(10,10,10,0.95); backdrop-filter:blur(20px);
+      padding:12px 20px; display:flex; align-items:center; justify-content:space-between;
+      border-bottom:2px solid var(--red);
+    }
+    .logo img { height:65px; transition:.4s; }
+    .logo img:hover { transform:scale(1.1) rotate(3deg); }
+    .header-title h1 {
+      font-size:2.5rem; font-weight:900;
+      background:linear-gradient(90deg,#fff,var(--red));
+      -webkit-background-clip:text; color:transparent;
+    }
+
+    /* MENU BUTTON PRO */
+    .menu-btn {
+      position:fixed; left:18px; top:100px; z-index:1002;
+      width:68px; height:68px; border-radius:50%;
+      background:linear-gradient(135deg,var(--red),#b71c1c);
+      border:none; color:white; font-size:2.2rem;
+      box-shadow:0 0 50px rgba(230,57,70,0.8), inset 0 0 20px rgba(255,255,255,0.2);
+      cursor:pointer; transition:all 0.4s;
+      animation:float 5s ease-in-out infinite;
+    }
+    .menu-btn:hover { transform:scale(1.18); box-shadow:0 0 70px rgba(230,57,70,1); }
+    @keyframes float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-12px); } }
+
+    /* SIDEBAR */
+    .sidebar {
+      position:fixed; left:-340px; top:0; bottom:0; width:340px;
+      background:linear-gradient(180deg,#0a0a0a,#16213e);
+      backdrop-filter:blur(20px); transition:0.6s cubic-bezier(0.68,-0.55,0.265,1.55);
+      z-index:1001; padding-top:150px; box-shadow:15px 0 50px rgba(0,0,0,0.9);
+    }
+    .sidebar.open { left:0; }
+    .sidebar h2 { position:absolute; top:30px; left:30px; color:var(--red); font-size:2rem; font-weight:900; }
+    .nav-item {
+      padding:22px 35px; color:white; font-size:1.35rem; cursor:pointer;
+      border-left:5px solid transparent; transition:all 0.4s;
+      display:flex; align-items:center;
+    }
+    .nav-item:hover, .nav-item.active {
+      background:rgba(230,57,70,0.25); border-left:5px solid var(--red);
+      padding-left:55px; transform:translateX(10px);
+    }
+    .nav-item i { margin-right:18px; font-size:1.7rem; width:35px; text-align:center; }
+
+    .overlay { position:fixed; inset:0; background:rgba(0,0,0,0.92); opacity:0; visibility:hidden; transition:0.4s; z-index:1000; }
+    .overlay.active { opacity:1; visibility:visible; }
+
+    /* MAIN CONTENT */
+    .main-content { margin-top:100px; padding:30px 15px; }
+    .hero { text-align:center; padding:30px 15px; }
+    .hero h2 { font-size:2.8rem; margin-bottom:20px; background:linear-gradient(90deg,#a8dadc,#f1faee); -webkit-background-clip:text; color:transparent; }
+    .welcome-msg {
+      max-width:1000px; margin:30px auto; background:var(--glass);
+      padding:35px; border-radius:20px; backdrop-filter:blur(15px);
+      border:1px solid var(--border); font-size:1.2rem; line-height:1.9;
+    }
+
+    .cards-container { display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); gap:30px; max-width:1400px; margin:0 auto; }
+    .card-pro {
+      display:none; background:var(--glass); backdrop-filter:blur(20px);
+      border-radius:24px; overflow:hidden; border:1px solid var(--border);
+      transition:all 0.6s; opacity:0; transform:translateY(40px);
+    }
+    .card-pro.visible { display:block; opacity:1; transform:translateY(0); }
+    .card-pro:hover { transform:translateY(-20px) scale(1.03); box-shadow:0 30px 70px rgba(230,57,70,0.5); }
+    .card-header { background:linear-gradient(135deg,var(--red),#a4161a); padding:35px; text-align:center; color:white; }
+    .card-header i { font-size:4.5rem; margin-bottom:15px; }
+    .card-header h3 { font-size:1.9rem; }
+    .card-body { padding:35px; font-size:1.15rem; line-height:1.9; }
+
+    /* ADMIN PANEL – MAINTENANT AUSSI BEAU QUE LE SITE */
+    .admin-panel {
+      position:fixed; inset:0; background:rgba(0,0,0,0.97); z-index:2000;
+      display:none; overflow-y:auto; padding:20px;
+      align-items:flex-start; justify-content:center;
+    }
+    .admin-box {
+      max-width:900px; width:100%; margin:100px auto 50px;
+      background:var(--glass); backdrop-filter:blur(25px);
+      border-radius:28px; border:2px solid var(--red);
+      padding:40px; box-shadow:0 20px 80px rgba(230,57,70,0.4);
+    }
+    .admin-box h2 {
+      text-align:center; font-size:2.8rem; color:var(--red); margin-bottom:30px;
+      background:linear-gradient(90deg,#fff,var(--red)); -webkit-background-clip:text; color:transparent;
+    }
+    .form-group { margin-bottom:25px; }
+    .form-group label { display:block; font-size:1.2rem; margin-bottom:10px; color:#ccc; }
+    textarea, input[type="email"], input[type="password"] {
+      width:100%; padding:16px; border-radius:14px;
+      background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2);
+      color:white; font-size:1.1rem; transition:0.3s;
+    }
+    textarea:focus, input:focus { outline:none; border-color:var(--red); box-shadow:0 0 20px rgba(230,57,70,0.3); }
+    .btn-group { text-align:center; margin-top:30px; }
+    button {
+      background:linear-gradient(135deg,var(--red),#b71c1c);
+      color:white; border:none; padding:14px 36px; border-radius:14px;
+      font-size:1.2rem; cursor:pointer; margin:10px; transition:0.4s;
+      box-shadow:0 8px 25px rgba(230,57,70,0.4);
+    }
+    button:hover { transform:translateY(-4px); box-shadow:0 15px 35px rgba(230,57,70,0.6); }
+    .btn-logout { background:#666 !important; }
+
+    /* FOOTER */
+    footer { text-align:center; padding:40px 20px; background:rgba(0,0,0,0.7); font-size:0.95rem; opacity:0.85; }
+
+    /* MOBILE PERFECTION */
+    @media (max-width: 768px) {
+      .header-title h1 { font-size:1.9rem; }
+      .hero h2 { font-size:2.3rem; }
+      .menu-btn { left:12px; top:90px; width:60px; height:60px; font-size:1.9rem; }
+      .sidebar { width:290px; left:-290px; padding-top:130px; }
+      .nav-item { padding:18px 25px; font-size:1.2rem; }
+      .nav-item:hover, .nav-item.active { padding-left:40px; }
+      .cards-container { grid-template-columns:1fr; padding:0 15px; gap:25px; }
+      .card-header { padding:25px; }
+      .card-header i { font-size:3.8rem; }
+      .card-body { padding:25px; font-size:1.1rem; }
+      .admin-box { margin:80px auto 30px; padding:25px; }
+      .admin-box h2 { font-size:2.2rem; }
+    }
+    @media (max-width: 480px) {
+      .header-title h1 { font-size:1.6rem; }
+      .hero h2 { font-size:2rem; }
+      .welcome-msg { padding:20px; font-size:1.1rem; }
+    }
   </style>
 </head>
 <body>
 
-<header>
-  <div class="logo"><img src="https://3dologie.com/wp-content/uploads/2024/07/WKW-Automotive-Logo.png" alt="WKW"></div>
-  <div class="titles">
-    <div class="fixed-title">WKW Automotive Tunisia</div>
-    <div class="editable-title" id="editableTitle" data-aos="fade-down">Chargement du message d'accueil...</div>
-  </div>
-</header>
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+      <img src="https://3dologie.com/wp-content/uploads/2024/07/WKW-Automotive-Logo.png" alt="WKW">
+    </div>
+    <div class="header-title">
+      <h1>WKW Automotive Tunisia</h1>
+    </div>
+    <div style="width:70px;"></div>
+  </header>
 
-<button class="menu-btn" onclick="toggleSidebar()">Menu</button>
-<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+  <!-- MENU + SIDEBAR -->
+  <button class="menu-btn" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+  </button>
+  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
-<nav class="sidebar" id="sidebar">
-  <button onclick="showAdminPanel()">Login Admin</button>
-</nav>
+  <nav class="sidebar" id="sidebar">
+    <h2>Menu</h2>
+    <div class="nav-item active" onclick="showSection('home')"><i class="fas fa-home"></i> Accueil</div>
+    <div class="nav-item" onclick="showSection('planning')"><i class="fas fa-calendar-check"></i> Planning</div>
+    <div class="nav-item" onclick="showSection('restauration')"><i class="fas fa-utensils"></i> Restauration</div>
+    <div class="nav-item" onclick="showSection('securite')"><i class="fas fa-shield-alt"></i> Sécurité</div>
+    <div class="nav-item" onclick="showAdminPanel()"><i class="fas fa-user-shield"></i> Administration</div>
+  </nav>
 
-<div class="main">
-  <div class="cards">
-    <div class="card" data-aos="zoom-in" data-aos-delay="100"><i class="fas fa-calendar-check"></i><h3 id="c1t">Planning des visites</h3><p id="c1p">Réservation en ligne...</p></div>
-    <div class="card" data-aos="zoom-in" data-aos-delay="300"><i class="fas fa-utensils"></i><h3 id="c2t">Horaires restauration</h3><p id="c2p">Menus du jour...</p></div>
-    <div class="card" data-aos="zoom-in" data-aos-delay="500"><i class="fas fa-shield-alt"></i><h3 id="c3t">Consignes de sécurité</h3><p id="c3p">Port EPI obligatoire...</p></div>
-  </div>
-</div>
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+    <div class="hero" id="heroSection">
+      <h2 id="pageTitle">BIENVENUE</h2>
+      <div class="welcome-msg" id="editableTitle">Chargement du contenu...</div>
+    </div>
 
-<div class="admin-panel" id="adminPanel">
-  <h2 style="text-align:center;font-size:2rem;margin-bottom:30px;">Administration</h2>
-  <div id="loginForm">
-    <input type="email" id="email" placeholder="Email" value="admin@wkw.tn"><br>
-    <input type="password" id="pass" placeholder="Mot de passe"><br>
-    <button onclick="login()">Connexion</button>
+    <div class="cards-container" id="cardsContainer">
+      <div class="card-pro visible" id="cardPlanning">
+        <div class="card-header"><i class="fas fa-calendar-check"></i><h3>Planning des visites</h3></div>
+        <div class="card-body" id="c1p">...</div>
+      </div>
+      <div class="card-pro visible" id="cardRestauration">
+        <div class="card-header"><i class="fas fa-utensils"></i><h3>Restauration</h3></div>
+        <div class="card-body" id="c2p">...</div>
+      </div>
+      <div class="card-pro visible" id="cardSecurite">
+        <div class="card-header"><i class="fas fa-shield-alt"></i><h3>Sécurité & HSE</h3></div>
+        <div class="card-body" id="c3p">...</div>
+      </div>
+    </div>
   </div>
-  <div id="editForm" style="display:none;">
-    <h3>Titre modifiable</h3><textarea id="mainTitle" rows="7"></textarea><br>
-    <h3>Carte 1</h3><input type="text" id="card1Title"><textarea id="card1Text" rows="3"></textarea><br>
-    <h3>Carte 2</h3><input type="text" id="card2Title"><textarea id="card2Text" rows="3"></textarea><br>
-    <h3>Carte 3</h3><input type="text" id="card3Title"><textarea id="card3Text" rows="3"></textarea><br>
-    <button onclick="saveContent()">Sauvegarder</button>
-    <button onclick="logout()" style="background:#666;">Déconnexion</button>
+
+  <footer>© 2025 WKW Automotive Tunisia - Portail Interne Professionnel</footer>
+
+  <!-- ADMIN PANEL – DESIGN PRO -->
+  <div class="admin-panel" id="adminPanel">
+    <div class="admin-box">
+      <h2>Administration</h2>
+      <div id="loginForm">
+        <div class="form-group"><input type="email" id="email" placeholder="Email admin" value="admin@wkw.tn"></div>
+        <div class="form-group"><input type="password" id="pass" placeholder="Mot de passe"></div>
+        <div class="btn-group"><button onclick="login()">Connexion</button></div>
+      </div>
+
+      <div id="editForm" style="display:none;">
+        <div class="form-group">
+          <label>Message d'accueil (Hero)</label>
+          <textarea id="mainTitle" rows="6"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Planning des visites</label>
+          <textarea id="card1Text" rows="5"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Restauration</label>
+          <textarea id="card2Text" rows="5"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Sécurité & HSE</label>
+          <textarea id="card3Text" rows="5"></textarea>
+        </div>
+        <div class="btn-group">
+          <button onclick="saveContent()">Sauvegarder</button>
+          <button class="btn-logout" onclick="logout()">Déconnexion</button>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
 
 <script>
-  const SUPABASE_URL = 'https://ylwuugfjpybaoerruypq.supabase.co';        // Change ici
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlsd3V1Z2ZqcHliYW9lcnJ1eXBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzI3MzYsImV4cCI6MjA4MDM0ODczNn0.NC-lSISG8GFTZeiHVTtlISRpXEh09OiaLjwEgWxHe4o';                       // Change ici
+  // SUPABASE
+  const SUPABASE_URL = 'https://ylwuugfjpybaoerruypq.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlsd3V1Z2ZqcHliYW9lcnJ1eXBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzI3MzYsImV4cCI6MjA4MDM0ODczNn0.NC-lSISG8GFTZeiHVTtlISRpXEh09OiaLjwEgWxHe4o';
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('active');}
-  function showAdminPanel(){document.getElementById('adminPanel').style.display='block';toggleSidebar();}
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('overlay').classList.toggle('active');
+  }
 
-  async function loadContent(){
-    const {data}=await supabase.from('portal_content').select('*').eq('id',1).single();
-    if(data){
-      document.getElementById('editableTitle').textContent=data.main_title||'Bienvenue !';
-      document.getElementById('c1t').textContent=data.card1_title;
-      document.getElementById('c1p').textContent=data.card1_text;
-      document.getElementById('c2t').textContent=data.card2_title;
-      document.getElementById('c2p').textContent=data.card2_text;
-      document.getElementById('c3t').textContent=data.card3_title;
-      document.getElementById('c3p').textContent=data.card3_text;
+  function setActiveMenu(el) {
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function showSection(section) {
+    const hero = document.getElementById('heroSection');
+    const cards = document.querySelectorAll('.card-pro');
+    cards.forEach(c => c.classList.remove('visible'));
+
+    if (section === 'home') {
+      hero.style.display = 'block';
+      document.getElementById('pageTitle').textContent = 'BIENVENUE';
+      cards.forEach(c => c.classList.add('visible'));
+    } else {
+      hero.style.display = 'none';
+      const cardId = 'card' + section.charAt(0).toUpperCase() + section.slice(1);
+      document.getElementById(cardId).classList.add('visible');
+      document.getElementById('pageTitle').textContent = document.querySelector('#' + cardId + ' h3').textContent;
+    }
+    toggleSidebar();
+    setActiveMenu(event.target.closest('.nav-item'));
+  }
+
+  function showAdminPanel() {
+    document.getElementById('adminPanel').style.display = 'flex';
+    toggleSidebar();
+  }
+
+  async function loadContent() {
+    const { data } = await supabase.from('portal_content').select('*').eq('id',1).single();
+    if (data) {
+      document.getElementById('editableTitle').innerHTML = data.main_title || 'Bienvenue...';
+      document.getElementById('c1p').innerHTML = data.card1_text;
+      document.getElementById('c2p').innerHTML = data.card2_text;
+      document.getElementById('c3p').innerHTML = data.card3_text;
     }
   }
-  async function login(){
-    const {error}=await supabase.auth.signInWithPassword({email:document.getElementById('email').value,password:document.getElementById('pass').value});
-    if(error)return alert(error.message);
-    document.getElementById('loginForm').style.display='none';
-    document.getElementById('editForm').style.display='block';
-    const {data}=await supabase.from('portal_content').select('*').eq('id',1).single();
-    document.getElementById('mainTitle').value=data?.main_title||'';
-    document.getElementById('card1Title').value=data?.card1_title||'';
-    document.getElementById('card1Text').value=data?.card1_text||'';
-    document.getElementById('card2Title').value=data?.card2_title||'';
-    document.getElementById('card2Text').value=data?.card2_text||'';
-    document.getElementById('card3Title').value=data?.card3_title||'';
-    document.getElementById('card3Text').value=data?.card3_text||'';
-  }
-  async function saveContent(){
-    await supabase.from('portal_content').update({
-      main_title:document.getElementById('mainTitle').value,
-      card1_title:document.getElementById('card1Title').value,
-      card1_text:document.getElementById('card1Text').value,
-      card2_title:document.getElementById('card2Title').value,
-      card2_text:document.getElementById('card2Text').value,
-      card3_title:document.getElementById('card3Title').value,
-      card3_text:document.getElementById('card3Text').value,
-    }).eq('id',1);
-    alert("Sauvegardé !");loadContent();
-  }
-  function logout(){supabase.auth.signOut();document.getElementById('adminPanel').style.display='none';}
 
-  AOS.init({duration:1000,once:true});
+  async function login() {
+    const { error } = await supabase.auth.signInWithPassword({
+      email: document.getElementById('email').value,
+      password: document.getElementById('pass').value
+    });
+    if (error) return alert("Erreur : " + error.message);
+    document.getElementById('loginForm').style.display = 'none';
+    document.getElementById('editForm').style.display = 'block';
+    const { data } = await supabase.from('portal_content').select('*').eq('id',1).single();
+    document.getElementById('mainTitle').value = data?.main_title || '';
+    document.getElementById('card1Text').value = data?.card1_text || '';
+    document.getElementById('card2Text').value = data?.card2_text || '';
+    document.getElementById('card3Text').value = data?.card3_text || '';
+  }
+
+  async function saveContent() {
+    await supabase.from('portal_content').update({
+      main_title: document.getElementById('mainTitle').value,
+      card1_text: document.getElementById('card1Text').value,
+      card2_text: document.getElementById('card2Text').value,
+      card3_text: document.getElementById('card3Text').value,
+    }).eq('id',1);
+    alert("Sauvegardé !"); loadContent();
+  }
+
+  function logout() {
+    supabase.auth.signOut();
+    document.getElementById('adminPanel').style.display = 'none';
+  }
+
+  AOS.init({ duration: 1000, once: true });
   loadContent();
 </script>
+
 </body>
 </html>
